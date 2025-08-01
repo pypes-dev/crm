@@ -70,15 +70,14 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
       {/* Central Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         {/* Logo Animation */}
-        <div className={`mb-12 transform transition-all duration-1000 ${
-          mounted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-75'
-        }`}>
+        <div className={`mb-12 transform transition-all duration-1000 ${mounted ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-75'
+          }`}>
           <div className="relative inline-block">
             <div className="w-32 h-32 mx-auto mb-8 relative">
               {/* Rotating Ring */}
               <div className="absolute inset-0 rounded-full border-4 border-purple-500/30 animate-spin-slow"></div>
               <div className="absolute inset-2 rounded-full border-2 border-blue-400/40 animate-spin-reverse"></div>
-              
+
               {/* Central Icon */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-purple-500/50">
@@ -104,9 +103,8 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
         </div>
 
         {/* Title Animation */}
-        <div className={`mb-8 transform transition-all duration-1000 delay-300 ${
-          mounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-        }`}>
+        <div className={`mb-8 transform transition-all duration-1000 delay-300 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+          }`}>
           <h1 className="text-7xl md:text-8xl font-black mb-4">
             <span className="block bg-gradient-to-r from-white via-purple-200 to-blue-200 bg-clip-text text-transparent animate-gradient">
               Pypes
@@ -118,18 +116,16 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
         </div>
 
         {/* Subtitle Animation */}
-        <div className={`mb-12 transform transition-all duration-1000 delay-500 ${
-          mounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
-        }`}>
+        <div className={`mb-12 transform transition-all duration-1000 delay-500 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'
+          }`}>
           <p className="text-xl md:text-2xl text-white/70 font-light max-w-2xl mx-auto leading-relaxed">
             Transform your business with intelligent CRM
           </p>
         </div>
 
         {/* CTA Button Animation */}
-        <div className={`transform transition-all duration-1000 delay-700 ${
-          showContent ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
-        }`}>
+        <div className={`transform transition-all duration-1000 delay-700 ${showContent ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
+          }`}>
           <button
             onClick={onGetStarted}
             className="group relative px-12 py-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-bold text-xl hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 flex items-center gap-4 mx-auto overflow-hidden"
@@ -137,7 +133,7 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
             {/* Button Background Animation */}
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            
+
             {/* Button Content */}
             <div className="relative flex items-center gap-4">
               <span className="group-hover:scale-110 transition-transform duration-300">
@@ -152,9 +148,8 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
         </div>
 
         {/* Floating Action Hint */}
-        <div className={`mt-16 transform transition-all duration-1000 delay-1000 ${
-          showContent ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
+        <div className={`mt-16 transform transition-all duration-1000 delay-1000 ${showContent ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}>
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/10">
             <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
             <span className="text-white/60 text-sm">Ready to transform your business?</span>
@@ -163,6 +158,7 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
       </div>
 
       {/* Custom Animations */}
+      {/* @ts-ignore */}
       <style jsx>{`
         @keyframes grid-move {
           0% { transform: translate(0, 0); }
