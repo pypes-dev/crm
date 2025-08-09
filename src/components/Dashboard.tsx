@@ -6,6 +6,7 @@ import AddLeadDialog from './AddLeadDialog';
 import DateTimePicker from './DateTimePicker';
 import CustomSelect from './CustomSelect';
 import LeadDetailModal from './LeadDetailModal';
+import { Website } from './MyBusiness/Website';
 
 interface DashboardProps {
   userEmail: string;
@@ -92,7 +93,7 @@ const statusColors = {
 export default function Dashboard({ userEmail }: DashboardProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [activeTab, setActiveTab] = useState<'leads' | 'appointments' | 'business'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'appointments' | 'business' | 'website'>('leads');
   const [showMobileStats, setShowMobileStats] = useState(false);
   const [showAddLead, setShowAddLead] = useState(false);
   const [showScheduler, setShowScheduler] = useState(false);
@@ -795,10 +796,10 @@ export default function Dashboard({ userEmail }: DashboardProps) {
                   <p className="text-sm text-gray-600 mb-4">Manage your online presence and lead generation</p>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between p-3 bg-white rounded-lg border border-emerald-100">
-                      <div className="flex items-center gap-2">
+                      <button className="flex items-center gap-2" onClick={() => setActiveTab('website')}>
                         <Globe className="w-4 h-4 text-emerald-600" />
                         <span className="text-sm font-medium">Website</span>
-                      </div>
+                      </button>
                       <button className="text-emerald-600 hover:text-emerald-700">
                         <ExternalLink className="w-4 h-4" />
                       </button>
@@ -826,6 +827,12 @@ export default function Dashboard({ userEmail }: DashboardProps) {
               </div>
             </div>
           </div>
+        )}
+
+        {activeTab === 'website' && (
+          <>
+            <Website />
+          </>
         )}
       </div>
 

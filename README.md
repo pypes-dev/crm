@@ -61,6 +61,44 @@ growth partner that helps you:
    npm run dev
    ```
 
+## 🖥️ Local Development
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v16 or later)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (required for Supabase local development)
+- [Supabase CLI](https://supabase.com/docs/guides/cli) (install with `npm install -g supabase`)
+
+### Setting Up Local Environment
+
+1. **Start Docker Desktop**
+   - Make sure Docker Desktop is running before starting the development server
+
+2. **Start the development environment**
+   ```bash
+   # This will start:
+   # - Vite development server
+   # - Supabase local development environment (PostgreSQL, Auth, Storage, etc.)
+   # - Edge Functions
+   npm run dev
+   ```
+
+3. **Access the local development environment**
+   - Frontend: http://localhost:5173
+   - Supabase Dashboard: http://localhost:54323
+   - Database Connection:
+     - Host: localhost
+     - Port: 54322
+     - Database: postgres
+     - Username: postgres
+     - Password: postgres
+
+### Troubleshooting
+
+- If you get port conflicts, check if other services are using ports 54321-54323
+- Run `supabase stop` to stop all local services
+- Run `supabase status` to check the status of local services
+
 ## 📚 Documentation
 
 For detailed documentation, please visit our

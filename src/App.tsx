@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import WelcomePage from './components/WelcomePage';
 import AuthPage from './components/AuthPage';
 import OrganizationDialog from './components/OrganizationDialog';
 import Dashboard from './components/Dashboard';
+import { PrivacyPolicy } from './components/PrivacyPolicy';
+import AccountDeletion from './components/AccountDeletion';
 
 type AppState = 'welcome' | 'auth' | 'organization' | 'dashboard';
 
@@ -28,26 +31,56 @@ function App() {
     setUserEmail('');
   };
 
-  if (currentState === 'welcome') {
-    return <WelcomePage onGetStarted={handleGetStarted} />;
-  }
+  // Define a protected route component
+  const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+    // Check if user is authenticated (you'll need to implement this logic)
+    const isAuthenticated = currentState === 'dashboard';
+    return isAuthenticated ? <>{children}</> : <Navigate to="/" replace />;
+  };
 
-  if (currentState === 'auth') {
-    return <AuthPage onBack={handleBackToWelcome} onEmailSubmit={handleEmailSubmit} />;
-  }
+  return (
+    <Router>
+      <Routes>
+        {/* Public routes */}
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/delete-account" element={<AccountDeletion />} />
 
-  if (currentState === 'organization') {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-        <OrganizationDialog 
-          userEmail={userEmail} 
-          onOrganizationSelected={handleOrganizationSelected} 
+        {/* Main app flow routes */}
+        <Route
+          path="/"
+          element={
+            currentState === 'welcome' ? (
+              <WelcomePage onGetStarted={handleGetStarted} />
+            ) : currentState === 'auth' ? (
+              <AuthPage onBack={handleBackToWelcome} onEmailSubmit={handleEmailSubmit} />
+            ) : currentState === 'organization' ? (
+              <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
+                <OrganizationDialog
+                  userEmail={userEmail}
+                  onOrganizationSelected={handleOrganizationSelected}
+                />
+              </div>
+            ) : (
+              <Navigate to="/dashboard" replace />
+            )
+          }
         />
-      </div>
-    );
-  }
 
-  return <Dashboard userEmail={userEmail} />;
+        {/* Protected route */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard userEmail={userEmail} />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
