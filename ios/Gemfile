@@ -1,0 +1,10 @@
+source "https://rubygems.org"
+
+ruby '~> 3.3.0'
+
+gem "fastlane"
+
+# Add any other gems your Fastfile requires here
+# For example:
+gem "cocoapods"
+gem "xcodeproj"
