@@ -11,11 +11,14 @@ export default function OrganizationDialog() {
   const [step, setStep] = useState<'detect' | 'search' | 'create'>('detect');
   const [newOrgName, setNewOrgName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [orgCheckLoading, setOrgCheckLoading] = useState(true);
   const [error, setError] = useState('');
   const checkUserOrganization = async () => {
-    const { data: org } = await supabase.from('organization_member').select('*').eq('user_id', user?.id)
+    const { data: org, error } = await supabase.from('organization_member').select('*').eq('user_id', user?.id)
     if (org && org.length > 0) {
       navigate('/');
+    } else {
+      setOrgCheckLoading(false);
     }
   }
 
@@ -58,6 +61,13 @@ export default function OrganizationDialog() {
     setIsLoading(false);
   };
 
+  if (authLoading || orgCheckLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500"></div>
+      </div>
+    );
+  }
   if (step === 'detect') {
     return (
       <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-6 z-50">

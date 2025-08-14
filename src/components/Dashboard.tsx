@@ -133,20 +133,26 @@ export default function Dashboard() {
   const onboardingSteps = [
     {
       title: "Welcome to Pypes Dev!",
-      description: "Let's get you started by adding your first lead. We'll guide you through the process.",
+      description: "Let's get you started. We'll guide you through the process.",
       buttonText: "Let's Go!",
       position: "center"
     },
     {
-      title: "1. Add Lead Details",
-      description: "Click the 'Add Lead' button to get started. You'll need basic information like name and contact details.",
+      title: "1. Let's Learn About Your Business",
+      description: "We'll use this to get your business online and automate comms with customers.",
       buttonText: "Next",
       position: "bottom-right"
     },
     {
-      title: "2. Track Interactions",
-      description: "After adding a lead, you can track all your communications, notes, and next steps in one place.",
-      buttonText: "Got it!",
+      title: "2. Tell us about your target customer",
+      description: "This will help us find more customers for you.",
+      buttonText: "Next",
+      position: "bottom-right"
+    },
+    {
+      title: "3. Invite Your Friends (Or don't!)",
+      description: "Invite your friends to join your organization and grow together.",
+      buttonText: "Next",
       position: "center"
     }
   ];
