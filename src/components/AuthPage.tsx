@@ -1,32 +1,137 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ArrowLeft, Mail, Send } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
 
-interface AuthPageProps {
-  onBack: () => void;
-  onEmailSubmit: (email: string) => void;
-}
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_ANON_KEY)
 
-export default function AuthPage({ onBack, onEmailSubmit }: AuthPageProps) {
+export default function AuthPage() {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
+  const [error, setError] = useState('');
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const navigate = useNavigate();
+
+
+  const handleOtpChange = async (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value.slice(-1);
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && index < 5) {
+      inputRefs.current[index + 1]?.focus();
+    }
+
+    // Auto-submit when all digits are entered
+    if (newOtp.every(digit => digit) && newOtp.length === 6) {
+      const code = newOtp.join('');
+      // Here you can add your OTP verification logic
+      console.log('Verifying OTP:', code);
+      const session = await verifyOtp(code);
+      if (session) {
+        navigate('/org-check');
+      }
+    }
+  };
+
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      // Move to previous input on backspace
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  async function signInWithEmail() {
+    return await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: import.meta.env.VITE_REDIRECT_URL,
+      },
+    })
+  }
+
+  const verifyOtp = async (otp: string) => {
+    try {
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.verifyOtp({
+        email: email,
+        token: otp,
+        type: 'email',
+      })
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      return session;
+    } catch (err) {
+      console.error("Unexpected error during OTP verification:", err);
+      setError(`An unexpected error occurred during OTP verification: ${err}. Please try again.`);
+      return {
+        data: null,
+        error: {
+          message:
+            "An unexpected error occurred during OTP verification. Please try again.",
+        },
+      };
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text/plain').trim();
+
+    if (/^\d{6}$/.test(pastedData)) {
+      const pastedOtp = pastedData.split('');
+      const newOtp = [...otp];
+
+      // Update the OTP array with pasted values
+      pastedOtp.forEach((digit, index) => {
+        if (index < 6) {
+          newOtp[index] = digit;
+        }
+      });
+
+      setOtp(newOtp);
+
+      // Focus the last input
+      const lastInputIndex = Math.min(5, pastedOtp.length - 1);
+      inputRefs.current[lastInputIndex]?.focus();
+      if (newOtp.every(digit => digit)) {
+        const code = newOtp.join('');
+        console.log('Verifying OTP:', code);
+        // Add your OTP verification logic here
+        const session = await verifyOtp(code);
+        if (session) {
+          navigate('/org-check');
+        }
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
 
     setIsLoading(true);
-    
+
     // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
+    const { data, error } = await signInWithEmail();
+
+    if (error) {
+      setError(error.message);
+      setIsLoading(false);
+      return;
+    }
+    setError('');
     setEmailSent(true);
     setIsLoading(false);
-    
-    // Simulate magic link click after 3 seconds
-    setTimeout(() => {
-      onEmailSubmit(email);
-    }, 3000);
   };
 
   if (emailSent) {
@@ -34,21 +139,57 @@ export default function AuthPage({ onBack, onEmailSubmit }: AuthPageProps) {
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center px-6">
         <div className="max-w-md w-full">
           <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-xl text-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Mail className="w-8 h-8 text-white" />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Check Your Email</h2>
-            <p className="text-gray-600 mb-6">
-              We've sent a magic link to <strong>{email}</strong>
-            </p>
-            <p className="text-sm text-gray-500">
-              Click the link in your email to continue. The link will expire in 15 minutes.
-            </p>
-            <div className="mt-8 flex items-center justify-center">
-              <div className="animate-pulse flex space-x-1">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <div className="w-2 h-2 bg-purple-500 rounded-full animation-delay-200"></div>
-                <div className="w-2 h-2 bg-purple-500 rounded-full animation-delay-300"></div>
+            <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center px-6">
+              <div className="max-w-md w-full">
+                <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-xl text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Mail className="w-8 h-8 text-white" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Check Your Email</h2>
+                  <p className="text-gray-600 mb-6">
+                    We've sent a verification code to <strong>{email}</strong>
+                  </p>
+                  {error && <p className="text-red-500">{error}</p>}
+                  <div className="space-y-6">
+                    <div className="flex justify-center space-x-2">
+                      {otp.map((digit, index) => (
+                        <input
+                          key={index}
+                          ref={el => inputRefs.current[index] = el}
+                          type="text"
+                          inputMode="numeric"
+                          onPaste={index === 0 ? handlePaste : undefined} // Only handle paste on first input
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleOtpChange(index, e.target.value)}
+                          onKeyDown={(e) => handleKeyDown(index, e)}
+                          className="w-12 h-14 text-2xl text-center font-semibold rounded-lg border-2 border-gray-200 
+                                   focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition-all 
+                                   duration-200 hover:border-purple-300"
+                          autoFocus={index === 0}
+                        />
+                      ))}
+                    </div>
+
+                    <p className="text-xs text-gray-500 text-center mt-2">
+                      Didn't receive a code?{' '}
+                      <button
+                        onClick={handleSubmit}
+                        className="text-purple-600 hover:text-purple-800 font-medium"
+                      >
+                        Resend
+                      </button>
+                    </p>
+                  </div>
+
+                  <div className="mt-8 flex items-center justify-center">
+                    <div className="animate-pulse flex space-x-1">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                      <div className="w-2 h-2 bg-purple-500 rounded-full animation-delay-200"></div>
+                      <div className="w-2 h-2 bg-purple-500 rounded-full animation-delay-300"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -61,7 +202,7 @@ export default function AuthPage({ onBack, onEmailSubmit }: AuthPageProps) {
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center px-6">
       <div className="max-w-md w-full">
         <button
-          onClick={onBack}
+          onClick={() => navigate('/')}
           className="flex items-center text-gray-600 hover:text-gray-900 mb-8 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -73,7 +214,7 @@ export default function AuthPage({ onBack, onEmailSubmit }: AuthPageProps) {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
             <p className="text-gray-600">Enter your email to get started with Pypes Dev</p>
           </div>
-
+          {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">

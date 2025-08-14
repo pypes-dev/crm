@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Brain, Sparkles, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-interface WelcomePageProps {
-  onGetStarted: () => void;
-}
-
-export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
+export default function WelcomePage() {
   const [mounted, setMounted] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
@@ -127,7 +125,7 @@ export default function WelcomePage({ onGetStarted }: WelcomePageProps) {
         <div className={`transform transition-all duration-1000 delay-700 ${showContent ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-20 opacity-0 scale-95'
           }`}>
           <button
-            onClick={onGetStarted}
+            onClick={() => navigate('/auth')}
             className="group relative px-12 py-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-full font-bold text-xl hover:shadow-2xl hover:shadow-purple-500/40 transition-all duration-500 transform hover:-translate-y-2 hover:scale-105 flex items-center gap-4 mx-auto overflow-hidden"
           >
             {/* Button Background Animation */}

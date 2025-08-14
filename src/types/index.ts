@@ -4,7 +4,7 @@ export interface Lead {
   email?: string;
   phone?: string;
   company?: string;
-  status: 'new' | 'contacted' | 'qualified' | 'proposal' | 'closed';
+  status: "new" | "contacted" | "qualified" | "proposal" | "closed";
   value: number;
   lastContact: string;
   notes: string;
@@ -18,7 +18,7 @@ export interface Lead {
   }>;
   activities?: Array<{
     id: string;
-    type: 'note' | 'call' | 'email' | 'meeting';
+    type: "note" | "call" | "email" | "meeting";
     content: string;
     timestamp: string;
   }>;
@@ -28,7 +28,6 @@ export interface Organization {
   id: string;
   name: string;
   domain: string;
-  memberCount: number;
 }
 
 export interface User {

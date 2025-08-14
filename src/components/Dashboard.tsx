@@ -8,89 +8,11 @@ import CustomSelect from './CustomSelect';
 import LeadDetailModal from './LeadDetailModal';
 import { Website } from './MyBusiness/Website';
 
-interface DashboardProps {
-  userEmail: string;
-}
-
-// const mockLeads: Lead[] = [
-//   {
-//     id: '1',
-//     name: 'Sarah Johnson',
-//     email: 'sarah.johnson@techcorp.com',
-//     phone: '+1 (555) 123-4567',
-//     company: 'TechCorp Industries',
-//     status: 'qualified',
-//     value: 85000,
-//     lastContact: '2024-01-15',
-//     notes: 'Interested in enterprise package. Decision maker confirmed. Next call scheduled for Friday.',
-//     avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   },
-//   {
-//     id: '2',
-//     name: 'Michael Chen',
-//     email: 'mchen@innovate.co',
-//     phone: '+1 (555) 987-6543',
-//     company: 'Innovate Solutions',
-//     status: 'proposal',
-//     value: 120000,
-//     lastContact: '2024-01-14',
-//     notes: 'Reviewing proposal. Expressed concerns about implementation timeline. Follow up needed.',
-//     avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   },
-//   {
-//     id: '3',
-//     name: 'Emily Rodriguez',
-//     company: 'StartupXYZ',
-//     status: 'new',
-//     value: 45000,
-//     lastContact: '2024-01-13',
-//     notes: 'Initial contact made through referral. Showing strong interest. Needs demo of key features.',
-//     avatar: 'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   },
-//   {
-//     id: '4',
-//     name: 'David Park',
-//     email: 'dpark@enterprise.com',
-//     company: 'Enterprise Corp',
-//     status: 'contacted',
-//     value: 200000,
-//     lastContact: '2024-01-12',
-//     notes: 'Large enterprise deal. Multiple stakeholders involved. Slow decision process expected.',
-//     avatar: 'https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   },
-//   {
-//     id: '5',
-//     name: 'Lisa Thompson',
-//     email: 'lisa@growthco.io',
-//     phone: '+1 (555) 345-6789',
-//     company: 'GrowthCo',
-//     status: 'closed',
-//     value: 75000,
-//     lastContact: '2024-01-10',
-//     notes: 'Deal closed successfully! Excellent feedback on our solution. Potential for upsell.',
-//     avatar: 'https://images.pexels.com/photos/762020/pexels-photo-762020.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   },
-//   {
-//     id: '6',
-//     name: 'Alex Morgan',
-//     phone: '+1 (555) 111-2222',
-//     status: 'new',
-//     value: 30000,
-//     lastContact: '2024-01-16',
-//     notes: 'Met at networking event. Interested in our services but needs more information.',
-//     avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&fit=crop'
-//   }
 const mockLeads: Lead[] = [];
 
-const statusColors = {
-  new: 'bg-blue-100 text-blue-800',
-  contacted: 'bg-yellow-100 text-yellow-800',
-  qualified: 'bg-purple-100 text-purple-800',
-  proposal: 'bg-orange-100 text-orange-800',
-  closed: 'bg-emerald-100 text-emerald-800'
-};
 
-export default function Dashboard({ userEmail }: DashboardProps) {
+export default function Dashboard() {
+  const userEmail = "CHANGE@ERMAIL>COM"
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [activeTab, setActiveTab] = useState<'leads' | 'appointments' | 'business' | 'website'>('leads');
