@@ -7,6 +7,9 @@ import DateTimePicker from './DateTimePicker';
 import CustomSelect from './CustomSelect';
 import LeadDetailModal from './LeadDetailModal';
 import { Website } from './MyBusiness/Website';
+import { OnboardingBusinessForm } from './Onboarding/OnboardingBusinessForm';
+import { OnboardingCustomerForm } from './Onboarding/OnboardingCustomerForm';
+import { OnboardingInviteForm } from './Onboarding/OnboardingInviteForm';
 
 const mockLeads: Lead[] = [];
 
@@ -141,19 +144,22 @@ export default function Dashboard() {
       title: "1. Let's Learn About Your Business",
       description: "We'll use this to get your business online and automate comms with customers.",
       buttonText: "Next",
-      position: "bottom-right"
+      position: "bottom-right",
+      inputForm: 'business'
     },
     {
       title: "2. Tell us about your target customer",
       description: "This will help us find more customers for you.",
       buttonText: "Next",
-      position: "bottom-right"
+      position: "bottom-right",
+      inputForm: 'customer'
     },
     {
       title: "3. Invite Your Friends (Or don't!)",
       description: "Invite your friends to join your organization and grow together.",
       buttonText: "Next",
-      position: "center"
+      position: "center",
+      inputForm: 'invite'
     }
   ];
 
@@ -200,6 +206,10 @@ export default function Dashboard() {
               <p className="text-gray-600 mb-6">
                 {onboardingSteps[onboardingStep].description}
               </p>
+
+              {onboardingSteps[onboardingStep].inputForm === 'business' && <OnboardingBusinessForm />}
+              {onboardingSteps[onboardingStep].inputForm === 'customer' && <OnboardingCustomerForm />}
+              {onboardingSteps[onboardingStep].inputForm === 'invite' && <OnboardingInviteForm />}
 
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
